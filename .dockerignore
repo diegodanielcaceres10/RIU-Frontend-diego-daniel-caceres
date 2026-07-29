@@ -1,0 +1,10 @@
+.git
+.gitignore
+
+frontend/node_modules
+frontend/.angular/cache
+frontend/dist
+
+npm-debug.log
+Dockerfile
+docker-compose.yml
