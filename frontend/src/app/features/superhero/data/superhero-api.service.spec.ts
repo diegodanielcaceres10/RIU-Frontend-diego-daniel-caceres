@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { SuperHeroService } from './superhero-api.service';
 import { HttpService } from '../../../core/services/http.service';
 import { USE_MOCK_DATA } from '../../../core/tokens/use-mock-data.token';
@@ -172,6 +172,27 @@ describe('SuperHeroService', () => {
         expect(completed).toBe(true);
       });
     });
+
+    describe('manejo de errores', () => {
+      it('should propagate error when getLocal fails', () => {
+        httpServiceMock.getLocal.mockReturnValue(
+          throwError(() => new Error('Error al cargar datos locales')),
+        );
+
+        let error: Error | undefined;
+        service.getSuperHeroes().subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Error al cargar datos locales');
+      });
+
+      it('should NOT populate the signal when getLocal fails', () => {
+        httpServiceMock.getLocal.mockReturnValue(throwError(() => new Error('fail')));
+
+        service.getSuperHeroes().subscribe({ error: () => {} });
+
+        expect(service.allSuperHeroes()).toEqual([]);
+      });
+    });
   });
 
   describe('modo API real (useMockData: false)', () => {
@@ -229,6 +250,102 @@ describe('SuperHeroService', () => {
 
       expect(httpServiceMock.delete).toHaveBeenCalledWith('superheroes/1');
       expect(service.allSuperHeroes().find((h) => h.id === 1)).toBeUndefined();
+    });
+
+    describe('manejo de errores', () => {
+      it('should propagate error when get fails on getSuperHeroes', () => {
+        httpServiceMock.get.mockReturnValue(throwError(() => new Error('Error de servidor')));
+
+        let error: Error | undefined;
+        service.getSuperHeroes().subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Error de servidor');
+      });
+
+      it('should propagate error when get fails on getSuperHeroById (not found / 404)', () => {
+        httpServiceMock.get.mockReturnValue(
+          throwError(() => new Error('Superhéroe no encontrado')),
+        );
+
+        let error: Error | undefined;
+        service.getSuperHeroById(999).subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Superhéroe no encontrado');
+        expect(httpServiceMock.get).toHaveBeenCalledWith('superheroes/999');
+      });
+
+      it('should propagate error when post fails on addSuperHero', () => {
+        httpServiceMock.post.mockReturnValue(
+          throwError(() => new Error('Error al crear superhéroe')),
+        );
+
+        let error: Error | undefined;
+        service
+          .addSuperHero({ name: 'Batman', power: 'Intelecto', publisher: 'DC' })
+          .subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Error al crear superhéroe');
+      });
+
+      it('should NOT update the signal when post fails on addSuperHero', () => {
+        httpServiceMock.get.mockReturnValue(of(mockData));
+        httpServiceMock.post.mockReturnValue(throwError(() => new Error('fail')));
+
+        service.getSuperHeroes().subscribe();
+        service.addSuperHero({ name: 'Batman', power: 'x', publisher: 'DC' }).subscribe({
+          error: () => {},
+        });
+
+        expect(service.allSuperHeroes()).toHaveLength(2); // no se agregó nada
+      });
+
+      it('should propagate error when put fails on updateSuperHero', () => {
+        httpServiceMock.get.mockReturnValue(of(mockData));
+        httpServiceMock.put.mockReturnValue(throwError(() => new Error('Error al actualizar')));
+
+        service.getSuperHeroes().subscribe();
+
+        let error: Error | undefined;
+        service
+          .updateSuperHero({ id: 1, name: 'Clark Kent', power: 'Vuelo', publisher: 'DC' })
+          .subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Error al actualizar');
+      });
+
+      it('should NOT modify the signal when put fails on updateSuperHero', () => {
+        httpServiceMock.get.mockReturnValue(of(mockData));
+        httpServiceMock.put.mockReturnValue(throwError(() => new Error('fail')));
+
+        service.getSuperHeroes().subscribe();
+        service
+          .updateSuperHero({ id: 1, name: 'Clark Kent', power: 'Vuelo', publisher: 'DC' })
+          .subscribe({ error: () => {} });
+
+        expect(service.allSuperHeroes().find((h) => h.id === 1)?.name).toBe('Superman'); // sin cambios
+      });
+
+      it('should propagate error when delete fails on deleteSuperHero', () => {
+        httpServiceMock.get.mockReturnValue(of(mockData));
+        httpServiceMock.delete.mockReturnValue(throwError(() => new Error('Error al eliminar')));
+
+        service.getSuperHeroes().subscribe();
+
+        let error: Error | undefined;
+        service.deleteSuperHero(1).subscribe({ error: (err) => (error = err) });
+
+        expect(error?.message).toBe('Error al eliminar');
+      });
+
+      it('should NOT remove the hero from the signal when delete fails', () => {
+        httpServiceMock.get.mockReturnValue(of(mockData));
+        httpServiceMock.delete.mockReturnValue(throwError(() => new Error('fail')));
+
+        service.getSuperHeroes().subscribe();
+        service.deleteSuperHero(1).subscribe({ error: () => {} });
+
+        expect(service.allSuperHeroes()).toHaveLength(2); // sigue estando
+      });
     });
   });
 });
