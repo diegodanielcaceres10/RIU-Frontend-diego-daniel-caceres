@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { SuperHeroService } from '../../../data/superhero-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-superhero-list-page',
@@ -26,6 +27,7 @@ import { SuperHeroService } from '../../../data/superhero-api.service';
 })
 export class SuperHeroListPage {
   private superHeroService = inject(SuperHeroService);
+  private router = inject(Router);
 
   displayedColumns = ['name', 'power', 'publisher', 'actions'];
 
@@ -36,7 +38,10 @@ export class SuperHeroListPage {
 
   filteredHeroes = computed(() => {
     const keyword = this.keyword().toLowerCase();
-    return this.superHeroService.allHeroes().filter((h) => h.name.toLowerCase().includes(keyword));
+    return this.superHeroService
+      .allHeroes()
+      .filter((h) => h.name.toLowerCase().includes(keyword))
+      .sort((a, b) => a.name.localeCompare(b.name));
   });
   pagedHeroes = computed(() => {
     const start = this.pageIndex() * this.pageSize();
@@ -68,9 +73,13 @@ export class SuperHeroListPage {
     this.loadHeroes();
   }
 
-  goToAdd(): void {}
+  goToAdd(): void {
+    this.router.navigate(['/superheroes/form']);
+  }
 
-  goToEdit(id: number): void {}
+  goToEdit(id: number): void {
+    this.router.navigate(['/superheroes/form', id]);
+  }
 
   onDelete(id: number, name: string): void {}
 }

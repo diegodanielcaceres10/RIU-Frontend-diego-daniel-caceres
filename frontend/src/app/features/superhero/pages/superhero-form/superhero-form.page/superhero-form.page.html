@@ -1,0 +1,64 @@
+<div class="superhero-form">
+  <div class="superhero-form__glow"></div>
+  <div class="superhero-form__card">
+    <h1 class="superhero-form__title">
+      {{ isEditMode() ? 'Editar héroe' : 'Nuevo héroe' }}
+    </h1>
+
+    @if (loading()) {
+      <div class="superhero-form__loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="superhero-form__form">
+        <mat-form-field appearance="outline" class="superhero-form__field">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" appUppercase />
+          @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+            <mat-error>El nombre es obligatorio</mat-error>
+          }
+          @if (form.controls.name.hasError('minlength')) {
+            <mat-error>Mínimo 2 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="superhero-form__field">
+          <mat-label>Poder</mat-label>
+          <input matInput formControlName="power" />
+          @if (form.controls.power.hasError('required') && form.controls.power.touched) {
+            <mat-error>El poder es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="superhero-form__field">
+          <mat-label>Editorial</mat-label>
+          <input matInput formControlName="publisher" />
+          @if (form.controls.publisher.hasError('required') && form.controls.publisher.touched) {
+            <mat-error>La editorial es obligatoria</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="superhero-form__actions">
+          <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="saving()">
+            Cancelar
+          </button>
+          <button mat-raised-button type="submit" class="hero-form__submit" [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+            <span>{{ isEditMode() ? 'Guardar cambios' : 'Crear héroe' }}</span>
+          </button>
+        </div>
+      </form>
+
+      @if (errorMessage()) {
+        <div class="superhero-form__error">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+    }
+  </div>
+</div>

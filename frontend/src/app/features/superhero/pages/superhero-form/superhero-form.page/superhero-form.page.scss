@@ -1,0 +1,112 @@
+$accent-purple: #521f57;
+$accent-blue: #2cabb3;
+$accent-light: #7dd4d8;
+
+.superhero-form {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, #0d0518 0%, $accent-purple 55%, #0d0518 100%);
+
+  &__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba($accent-blue, 0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 2.5rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba($accent-light, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 1.5rem;
+    text-align: center;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+
+    ::ng-deep circle {
+      stroke: $accent-light;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__field {
+    width: 100%;
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    ::ng-deep input,
+    ::ng-deep .mat-mdc-form-field-label {
+      color: #fff;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  &__submit {
+    background: $accent-blue !important;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 140px;
+    justify-content: center;
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: rgba(#f44336, 0.1);
+    border: 1px solid rgba(#f44336, 0.3);
+    color: #ff8a80;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+  }
+}
