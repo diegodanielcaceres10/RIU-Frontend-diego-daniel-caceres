@@ -3,12 +3,12 @@ import { of, tap, throwError } from 'rxjs';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/services/http.service';
 import { SuperHero } from '../domain/superhero.models';
-import { environment } from '../../../../environments/environment';
+import { USE_MOCK_DATA } from '../../../core/tokens/use-mock-data.token';
 
 @Injectable({ providedIn: 'root' })
 export class SuperHeroService {
   private httpService = inject(HttpService);
-  private readonly useMock = environment.useMockData;
+  private readonly useMock = inject(USE_MOCK_DATA);
   private readonly resource = 'superheroes';
 
   private superheroes = signal<SuperHero[]>([]);
