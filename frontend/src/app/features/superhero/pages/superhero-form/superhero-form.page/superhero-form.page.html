@@ -42,7 +42,12 @@
           <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="saving()">
             Cancelar
           </button>
-          <button mat-raised-button type="submit" class="hero-form__submit" [disabled]="saving()">
+          <button
+            mat-raised-button
+            type="submit"
+            class="superhero-form__submit"
+            [disabled]="saving()"
+          >
             @if (saving()) {
               <mat-spinner diameter="20"></mat-spinner>
             } @else {

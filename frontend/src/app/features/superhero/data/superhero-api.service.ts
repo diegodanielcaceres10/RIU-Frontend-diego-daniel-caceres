@@ -12,12 +12,12 @@ export class SuperHeroService {
   private readonly resource = 'superheroes';
 
   private superheroes = signal<SuperHero[]>([]);
-  readonly allHeroes = this.superheroes.asReadonly();
+  readonly allSuperHeroes = this.superheroes.asReadonly();
 
   private loaded = signal(false);
   private nextId = signal(1);
 
-  getHeroes(): Observable<SuperHero[]> {
+  getSuperHeroes(): Observable<SuperHero[]> {
     if (this.loaded()) {
       return of(this.superheroes());
     }
@@ -27,32 +27,22 @@ export class SuperHeroService {
       : this.httpService.get<SuperHero[]>(this.resource);
 
     return source$.pipe(
-      tap((heroes) => {
-        this.superheroes.set(heroes);
+      tap((superheroes) => {
+        this.superheroes.set(superheroes);
         this.loaded.set(true);
-        this.nextId.set(Math.max(0, ...heroes.map((h) => h.id)) + 1);
+        this.nextId.set(Math.max(0, ...superheroes.map((item) => item.id)) + 1);
       }),
     );
   }
 
-  getHeroById(id: number): Observable<SuperHero | undefined> {
+  getSuperHeroById(id: number): Observable<SuperHero | undefined> {
     if (this.useMock) {
       return of(this.superheroes().find((item) => item.id === id));
     }
     return this.httpService.get<SuperHero>(`${this.resource}/${id}`);
   }
 
-  searchHeroesByName(keyword: string): Observable<SuperHero[]> {
-    if (this.useMock) {
-      const term = keyword.toLowerCase();
-      return of(this.superheroes().filter((item) => item.name.toLowerCase().includes(term)));
-    }
-    return this.httpService.get<SuperHero[]>(`${this.resource}/search`, {
-      params: { name: keyword },
-    });
-  }
-
-  addHero(superhero: Omit<SuperHero, 'id'>): Observable<SuperHero> {
+  addSuperHero(superhero: Omit<SuperHero, 'id'>): Observable<SuperHero> {
     if (this.useMock) {
       const alreadyExists = this.superheroes().some(
         (item) => item.name.toLowerCase() === superhero.name.toLowerCase(),
@@ -61,18 +51,18 @@ export class SuperHeroService {
         return throwError(() => new Error('Ya existe un superhéroe con ese nombre'));
       }
 
-      const newHero: SuperHero = { ...superhero, id: this.nextId() };
-      this.superheroes.update((list) => [...list, newHero]);
+      const newSuperHero: SuperHero = { ...superhero, id: this.nextId() };
+      this.superheroes.update((list) => [...list, newSuperHero]);
       this.nextId.update((n) => n + 1);
-      return of(newHero);
+      return of(newSuperHero);
     }
 
     return this.httpService
       .post<SuperHero>(this.resource, superhero)
-      .pipe(tap((newHero) => this.superheroes.update((list) => [...list, newHero])));
+      .pipe(tap((newSuperHero) => this.superheroes.update((list) => [...list, newSuperHero])));
   }
 
-  updateHero(superhero: SuperHero): Observable<SuperHero> {
+  updateSuperHero(superhero: SuperHero): Observable<SuperHero> {
     if (this.useMock) {
       const alreadyExists = this.superheroes().some(
         (item) =>
@@ -96,7 +86,7 @@ export class SuperHeroService {
       );
   }
 
-  deleteHero(id: number): Observable<void> {
+  deleteSuperHero(id: number): Observable<void> {
     if (this.useMock) {
       this.superheroes.update((list) => list.filter((h) => h.id !== id));
       return of(void 0);

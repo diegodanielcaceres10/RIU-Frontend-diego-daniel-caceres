@@ -50,14 +50,14 @@ export class SuperHeroFormPage implements OnInit {
       const id = Number(idParam);
       this.superheroId.set(id);
       this.isEditMode.set(true);
-      this.loadHero(id);
+      this.loadSuperHero(id);
     }
   }
 
-  private loadHero(id: number): void {
+  private loadSuperHero(id: number): void {
     this.loading.set(true);
     this.superHeroService
-      .getHeroById(id)
+      .getSuperHeroById(id)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe((superhero) => {
         if (!superhero) {
@@ -82,8 +82,8 @@ export class SuperHeroFormPage implements OnInit {
     const value = this.form.getRawValue();
 
     const request$ = this.isEditMode()
-      ? this.superHeroService.updateHero({ id: this.superheroId()!, ...value })
-      : this.superHeroService.addHero(value);
+      ? this.superHeroService.updateSuperHero({ id: this.superheroId()!, ...value })
+      : this.superHeroService.addSuperHero(value);
 
     request$.pipe(finalize(() => this.saving.set(false))).subscribe({
       next: () => this.router.navigate(['/superheroes']),

@@ -42,27 +42,27 @@ export class SuperHeroListPage {
   pageIndex = signal(0);
   pageSize = signal(5);
 
-  filteredHeroes = computed(() => {
+  filteredSuperHeroes = computed(() => {
     const keyword = this.keyword().toLowerCase();
     return this.superHeroService
-      .allHeroes()
+      .allSuperHeroes()
       .filter((h) => h.name.toLowerCase().includes(keyword))
       .sort((a, b) => a.name.localeCompare(b.name));
   });
-  pagedHeroes = computed(() => {
+  pagedSuperHeroes = computed(() => {
     const start = this.pageIndex() * this.pageSize();
-    return this.filteredHeroes().slice(start, start + this.pageSize());
+    return this.filteredSuperHeroes().slice(start, start + this.pageSize());
   });
-  totalHeroes = computed(() => this.filteredHeroes().length);
+  totalSuperHeroes = computed(() => this.filteredSuperHeroes().length);
 
   ngOnInit(): void {
-    void this.loadHeroes();
+    void this.loadSuperHeroes();
   }
 
-  private loadHeroes(): void {
+  private loadSuperHeroes(): void {
     this.loading.set(true);
     this.superHeroService
-      .getHeroes()
+      .getSuperHeroes()
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe();
   }
@@ -70,13 +70,11 @@ export class SuperHeroListPage {
   onFilterChange(value: string): void {
     this.keyword.set(value);
     this.pageIndex.set(0);
-    this.loadHeroes();
   }
 
   onPageChange(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
-    this.loadHeroes();
   }
 
   goToAdd(): void {
@@ -99,7 +97,7 @@ export class SuperHeroListPage {
       if (confirmed) {
         this.loading.set(true);
         this.superHeroService
-          .deleteHero(id)
+          .deleteSuperHero(id)
           .pipe(finalize(() => this.loading.set(false)))
           .subscribe();
       }
