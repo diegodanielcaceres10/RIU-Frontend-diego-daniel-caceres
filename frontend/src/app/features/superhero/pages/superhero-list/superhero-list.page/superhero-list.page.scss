@@ -1,0 +1,119 @@
+$accent-purple: #521f57;
+$accent-blue: #2cabb3;
+$accent-light: #7dd4d8;
+
+.superhero-list {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: 3rem 1rem;
+  background: linear-gradient(160deg, #0d0518 0%, $accent-purple 55%, #0d0518 100%);
+
+  &__glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 700px;
+    height: 700px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba($accent-blue, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 900px;
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba($accent-light, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+  }
+
+  &__add-btn {
+    background: $accent-blue !important;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__filter {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    ::ng-deep .mat-mdc-form-field-label,
+    ::ng-deep input {
+      color: #fff;
+    }
+  }
+
+  &__table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+  }
+
+  &__table {
+    width: 100%;
+    background: transparent;
+
+    ::ng-deep th.mat-mdc-header-cell {
+      color: $accent-light;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    ::ng-deep td.mat-mdc-cell,
+    ::ng-deep th.mat-mdc-header-cell {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    ::ng-deep tr.mat-mdc-row {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        background: rgba($accent-blue, 0.08);
+      }
+    }
+
+    ::ng-deep .mat-mdc-icon-button {
+      color: $accent-light;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 2rem 0;
+  }
+
+  ::ng-deep .mat-mdc-paginator {
+    background: transparent;
+    color: #fff;
+  }
+}

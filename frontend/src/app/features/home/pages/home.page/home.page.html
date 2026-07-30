@@ -1,0 +1,33 @@
+<div class="home">
+  <div class="home__glow"></div>
+
+  <mat-card class="home__card">
+    <mat-icon class="home__icon">bolt</mat-icon>
+
+    <h1 class="home__title">Super Heroes Manager</h1>
+    <p class="home__subtitle">Gestiona tu universo de héroes</p>
+
+    <div class="home__actions">
+      <button mat-raised-button color="primary" class="home__btn" (click)="goToList()">
+        <mat-icon>list</mat-icon>
+        Ver listado
+      </button>
+
+      <button mat-raised-button class="home__btn home__btn--accent" (click)="goToAdd()">
+        <mat-icon>add_circle</mat-icon>
+        Agregar héroe
+      </button>
+
+      <a
+        mat-stroked-button
+        href="https://diegodanielcaceres10.github.io/nura/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="home__btn home__btn--outline"
+      >
+        <mat-icon>badge</mat-icon>
+        Ver mi portfolio
+      </a>
+    </div>
+  </mat-card>
+</div>
