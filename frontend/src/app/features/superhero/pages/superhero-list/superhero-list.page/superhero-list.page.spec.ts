@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SuperHeroListPage } from './superhero-list.page';
@@ -148,6 +148,31 @@ describe('SuperHeroListPage', () => {
       component.onDelete(1, 'Superman');
 
       expect(superHeroServiceMock.deleteSuperHero).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('manejo de errores', () => {
+    it('should set loading to false even when getSuperHeroes fails', () => {
+      superHeroServiceMock.getSuperHeroes.mockReturnValue(
+        throwError(() => new Error('Error de red')),
+      );
+
+      const fixture = TestBed.createComponent(SuperHeroListPage);
+      fixture.detectChanges();
+      const localComponent = fixture.componentInstance;
+
+      expect(localComponent.loading()).toBe(false);
+    });
+
+    it('should set loading to false when deleteSuperHero fails after confirmation', () => {
+      superHeroServiceMock.deleteSuperHero.mockReturnValue(
+        throwError(() => new Error('Error al eliminar')),
+      );
+      dialogMock.open.mockReturnValue({ afterClosed: () => of(true) });
+
+      component.onDelete(1, 'Superman');
+
+      expect(component.loading()).toBe(false);
     });
   });
 });

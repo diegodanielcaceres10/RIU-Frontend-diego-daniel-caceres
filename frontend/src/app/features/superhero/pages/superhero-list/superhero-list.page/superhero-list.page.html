@@ -21,6 +21,13 @@
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
+    @if (errorMessage()) {
+      <div class="superhero-list__error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
     <div class="superhero-list__table-wrapper">
       @if (loading()) {
         <div class="superhero-list__loading">

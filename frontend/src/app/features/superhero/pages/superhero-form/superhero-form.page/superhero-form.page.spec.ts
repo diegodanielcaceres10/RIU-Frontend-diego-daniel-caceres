@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { SuperHeroFormPage } from './superhero-form.page';
 import { SuperHeroService } from '../../../data/superhero-api.service';
 import { SuperHero } from '../../../domain/superhero.models';
@@ -268,6 +268,197 @@ describe('SuperHeroFormPage', () => {
 
     it('should redirect to /superheroes if superhero is not found', () => {
       expect(routerMock.navigate).toHaveBeenCalledWith(['/superheroes']);
+    });
+  });
+
+  describe('renderizado del template', () => {
+    it('should show the spinner while loading (edit mode)', () => {
+      superHeroServiceMock = {
+        getSuperHeroById: vi.fn().mockReturnValue({ pipe: () => ({ subscribe: () => {} }) }),
+        addSuperHero: vi.fn(),
+        updateSuperHero: vi.fn(),
+      };
+      routerMock = { navigate: vi.fn() };
+
+      TestBed.configureTestingModule({
+        imports: [SuperHeroFormPage],
+        providers: [
+          { provide: SuperHeroService, useValue: superHeroServiceMock },
+          { provide: Router, useValue: routerMock },
+          {
+            provide: ActivatedRoute,
+            useValue: { snapshot: { paramMap: convertToParamMap({ id: '1' }) } },
+          },
+        ],
+      });
+
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.querySelector('.superhero-form__loading')).toBeTruthy();
+      expect(el.querySelector('form')).toBeFalsy();
+    });
+
+    it('should show the form (not the spinner) once loading finishes', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.querySelector('.superhero-form__loading')).toBeFalsy();
+      expect(el.querySelector('form')).toBeTruthy();
+    });
+
+    it('should show "Nuevo héroe" as title in add mode', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.querySelector('.superhero-form__title')?.textContent).toContain('Nuevo héroe');
+    });
+
+    it('should show the required error for name only after it is touched', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.textContent).not.toContain('El nombre es obligatorio');
+
+      localComponent.form.controls.name.markAsTouched();
+      fixture.detectChanges();
+
+      expect(el.textContent).toContain('El nombre es obligatorio');
+    });
+
+    it('should show the minlength error for name once touched', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      localComponent.form.controls.name.setValue('A');
+      localComponent.form.controls.name.markAsTouched();
+      fixture.detectChanges();
+
+      expect(el.textContent).toContain('Mínimo 2 caracteres');
+    });
+
+    it('should show the required error for power only after it is touched', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      localComponent.form.controls.power.markAsTouched();
+      fixture.detectChanges();
+
+      expect(el.textContent).toContain('El poder es obligatorio');
+    });
+
+    it('should show the required error for publisher only after it is touched', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      localComponent.form.controls.publisher.markAsTouched();
+      fixture.detectChanges();
+
+      expect(el.textContent).toContain('La editorial es obligatoria');
+    });
+
+    it('should show a spinner inside the submit button while saving', () => {
+      setup(null);
+      const subject = new Subject<SuperHero>();
+      superHeroServiceMock.addSuperHero.mockReturnValue(subject.asObservable());
+
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+
+      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
+      localComponent.onSubmit();
+      fixture.detectChanges();
+
+      const el: HTMLElement = fixture.nativeElement;
+      const submitButton = el.querySelector('.superhero-form__submit');
+
+      expect(submitButton?.querySelector('mat-spinner')).toBeTruthy();
+      expect(submitButton?.querySelector('mat-icon')).toBeFalsy();
+
+      subject.next({ id: 1, name: 'Flash', power: 'Velocidad', publisher: 'DC' });
+    });
+
+    it('should disable cancel and submit buttons while saving', () => {
+      setup(null);
+      const subject = new Subject<SuperHero>();
+      superHeroServiceMock.addSuperHero.mockReturnValue(subject.asObservable());
+
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+
+      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
+      localComponent.onSubmit();
+      fixture.detectChanges();
+
+      const el: HTMLElement = fixture.nativeElement;
+      const buttons = el.querySelectorAll<HTMLButtonElement>('button');
+
+      expect(buttons[0].disabled).toBe(true);
+      expect(buttons[1].disabled).toBe(true);
+    });
+
+    it('should show the save icon (not the spinner) once saving finishes', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+
+      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
+      localComponent.onSubmit();
+      fixture.detectChanges();
+
+      const el: HTMLElement = fixture.nativeElement;
+      const submitButton = el.querySelector('.superhero-form__submit');
+
+      expect(submitButton?.querySelector('mat-icon')).toBeTruthy();
+    });
+
+    it('should display the error message block when addSuperHero fails', () => {
+      setup(null);
+      superHeroServiceMock.addSuperHero.mockReturnValue(
+        throwError(() => new Error('Ya existe un superhéroe con ese nombre')),
+      );
+
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      const localComponent = fixture.componentInstance;
+      fixture.detectChanges();
+
+      localComponent.form.setValue({ name: 'Superman', power: 'Vuelo', publisher: 'DC' });
+      localComponent.onSubmit();
+      fixture.detectChanges();
+
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.querySelector('.superhero-form__error')).toBeTruthy();
+      expect(el.textContent).toContain('Ya existe un superhéroe con ese nombre');
+    });
+
+    it('should NOT display the error block when there is no error', () => {
+      setup(null);
+      const fixture = TestBed.createComponent(SuperHeroFormPage);
+      fixture.detectChanges();
+      const el: HTMLElement = fixture.nativeElement;
+
+      expect(el.querySelector('.superhero-form__error')).toBeFalsy();
     });
   });
 });

@@ -41,6 +41,7 @@ export class SuperHeroListPage {
   keyword = signal('');
   pageIndex = signal(0);
   pageSize = signal(5);
+  errorMessage = signal<string | null>(null);
 
   filteredSuperHeroes = computed(() => {
     const keyword = this.keyword().toLowerCase();
@@ -64,7 +65,9 @@ export class SuperHeroListPage {
     this.superHeroService
       .getSuperHeroes()
       .pipe(finalize(() => this.loading.set(false)))
-      .subscribe();
+      .subscribe({
+        error: (err: Error) => this.errorMessage.set(err.message),
+      });
   }
 
   onFilterChange(value: string): void {
@@ -99,7 +102,9 @@ export class SuperHeroListPage {
         this.superHeroService
           .deleteSuperHero(id)
           .pipe(finalize(() => this.loading.set(false)))
-          .subscribe();
+          .subscribe({
+            error: (err: Error) => this.errorMessage.set(err.message),
+          });
       }
     });
   }
