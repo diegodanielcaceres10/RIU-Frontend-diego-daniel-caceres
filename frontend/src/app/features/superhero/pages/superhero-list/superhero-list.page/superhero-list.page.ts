@@ -7,8 +7,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { SuperHeroService } from '../../../data/superhero-api.service';
 import { Router } from '@angular/router';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-superhero-list-page',
@@ -28,6 +33,7 @@ import { Router } from '@angular/router';
 export class SuperHeroListPage {
   private superHeroService = inject(SuperHeroService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   displayedColumns = ['name', 'power', 'publisher', 'actions'];
 
@@ -81,5 +87,22 @@ export class SuperHeroListPage {
     this.router.navigate(['/superheroes/form', id]);
   }
 
-  onDelete(id: number, name: string): void {}
+  onDelete(id: number, name: string): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Eliminar héroe',
+        message: `¿Seguro que deseas eliminar a ${name}? Esta acción no se puede deshacer.`,
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.loading.set(true);
+        this.superHeroService
+          .deleteHero(id)
+          .pipe(finalize(() => this.loading.set(false)))
+          .subscribe();
+      }
+    });
+  }
 }

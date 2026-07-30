@@ -1,0 +1,40 @@
+$accent-light: #7dd4d8;
+
+.confirm-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 0.5rem 0.5rem;
+
+  &__icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: #ffb74d;
+    margin-bottom: 0.75rem;
+  }
+
+  &__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+  }
+
+  &__message {
+    margin: 0 0 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  &__confirm {
+    background: #e53935 !important;
+    color: #fff !important;
+  }
+}
