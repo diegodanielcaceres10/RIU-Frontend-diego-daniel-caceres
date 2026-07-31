@@ -11,6 +11,9 @@ $border: #eceef5;
   position: relative;
   min-height: 100vh;
   overflow: hidden;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   background: $bg;
 
   &__container {
@@ -20,7 +23,7 @@ $border: #eceef5;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
-    width: 90%;
+    width: 80%;
     max-width: 1200px;
     padding: 3rem;
     background: rgba(255, 255, 255, 0.82);

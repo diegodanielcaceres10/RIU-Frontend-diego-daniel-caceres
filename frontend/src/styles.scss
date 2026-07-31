@@ -65,3 +65,23 @@ body {
     border-right: none !important;
   }
 }
+
+.logo__author {
+  width: 9rem;
+  max-width: 50%;
+  margin: 2rem;
+
+  & img {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+    filter: grayscale(0.5);
+    opacity: 0.5;
+    transition: opacity 300ms ease;
+
+    &:hover {
+      filter: grayscale(0);
+      opacity: 1;
+    }
+  }
+}
