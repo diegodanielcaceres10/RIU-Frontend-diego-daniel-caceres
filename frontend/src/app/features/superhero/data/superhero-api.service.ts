@@ -1,5 +1,5 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { of, tap, throwError } from 'rxjs';
+import { delay, finalize, of, tap, throwError } from 'rxjs';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/services/http.service';
 import { SuperHero } from '../domain/superhero.models';
@@ -12,10 +12,12 @@ export class SuperHeroService {
   private readonly resource = 'superheroes';
 
   private superheroes = signal<SuperHero[]>([]);
-  readonly allSuperHeroes = this.superheroes.asReadonly();
+  private loading = signal<boolean>(false);
+  private loaded = signal<boolean>(false);
+  private nextId = signal<number>(1);
 
-  private loaded = signal(false);
-  private nextId = signal(1);
+  readonly allSuperHeroes = this.superheroes.asReadonly();
+  readonly isLoading = this.loading.asReadonly();
 
   getSuperHeroes(): Observable<SuperHero[]> {
     if (this.loaded()) {
@@ -43,57 +45,79 @@ export class SuperHeroService {
   }
 
   addSuperHero(superhero: Omit<SuperHero, 'id'>): Observable<SuperHero> {
+    this.loading.set(true);
     if (this.useMock) {
       const alreadyExists = this.superheroes().some(
         (item) => item.name.toLowerCase() === superhero.name.toLowerCase(),
       );
       if (alreadyExists) {
+        this.loading.set(false);
         return throwError(() => new Error('Ya existe un superhéroe con ese nombre'));
       }
 
       const newSuperHero: SuperHero = { ...superhero, id: this.nextId() };
       this.superheroes.update((list) => [...list, newSuperHero]);
       this.nextId.update((n) => n + 1);
-      return of(newSuperHero);
+      return of(newSuperHero).pipe(
+        delay(2000),
+        finalize(() => this.loading.set(false)),
+      );
     }
 
-    return this.httpService
-      .post<SuperHero>(this.resource, superhero)
-      .pipe(tap((newSuperHero) => this.superheroes.update((list) => [...list, newSuperHero])));
+    return this.httpService.post<SuperHero>(this.resource, superhero).pipe(
+      delay(2000),
+      tap((newSuperHero) => {
+        this.superheroes.update((list) => [...list, newSuperHero]);
+        this.loading.set(false);
+      }),
+    );
   }
 
   updateSuperHero(superhero: SuperHero): Observable<SuperHero> {
+    this.loading.set(true);
     if (this.useMock) {
       const alreadyExists = this.superheroes().some(
         (item) =>
           item.id !== superhero.id && item.name.toLowerCase() === superhero.name.toLowerCase(),
       );
       if (alreadyExists) {
+        this.loading.set(false);
         return throwError(() => new Error('Ya existe otro superhéroe con ese nombre'));
       }
       this.superheroes.update((list) =>
         list.map((item) => (item.id === superhero.id ? superhero : item)),
       );
-      return of(superhero);
+      return of(superhero).pipe(
+        delay(2000),
+        finalize(() => this.loading.set(false)),
+      );
     }
 
-    return this.httpService
-      .put<SuperHero>(`${this.resource}/${superhero.id}`, superhero)
-      .pipe(
-        tap((updated) =>
-          this.superheroes.update((list) => list.map((h) => (h.id === updated.id ? updated : h))),
-        ),
-      );
+    return this.httpService.put<SuperHero>(`${this.resource}/${superhero.id}`, superhero).pipe(
+      delay(2000),
+      tap((updated) => {
+        this.superheroes.update((list) => list.map((h) => (h.id === updated.id ? updated : h)));
+        this.loading.set(false);
+      }),
+    );
   }
 
   deleteSuperHero(id: number): Observable<void> {
+    this.loading.set(true);
     if (this.useMock) {
       this.superheroes.update((list) => list.filter((h) => h.id !== id));
-      return of(void 0);
+      return of(void 0).pipe(
+        delay(2000),
+        finalize(() => this.loading.set(false)),
+      );
     }
 
-    return this.httpService
-      .delete<void>(`${this.resource}/${id}`)
-      .pipe(tap(() => this.superheroes.update((list) => list.filter((h) => h.id !== id))));
+    return this.httpService.delete<void>(`${this.resource}/${id}`).pipe(
+      delay(2000),
+      tap(() => {
+        this.superheroes.update((list) => list.filter((h) => h.id !== id));
+        this.loading.set(false);
+      }),
+    );
   }
 }

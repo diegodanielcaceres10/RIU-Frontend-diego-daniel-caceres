@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+  computed,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
@@ -34,9 +41,8 @@ export class SuperHeroFormPage implements OnInit {
   private router = inject(Router);
 
   superheroId = signal<number | null>(null);
-  isEditMode = signal(false);
-  loading = signal(false);
-  saving = signal(false);
+  isEditMode = signal<boolean>(false);
+  loading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
@@ -44,6 +50,8 @@ export class SuperHeroFormPage implements OnInit {
     power: ['', [Validators.required, Validators.maxLength(60)]],
     publisher: ['', Validators.required],
   });
+
+  serviceIsLoading = computed(() => this.superHeroService.isLoading());
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -80,14 +88,13 @@ export class SuperHeroFormPage implements OnInit {
       return;
     }
 
-    this.saving.set(true);
     const value = this.form.getRawValue();
 
     const request$ = this.isEditMode()
       ? this.superHeroService.updateSuperHero({ id: this.superheroId()!, ...value })
       : this.superHeroService.addSuperHero(value);
 
-    request$.pipe(finalize(() => this.saving.set(false))).subscribe({
+    request$.pipe().subscribe({
       next: () => this.router.navigate(['/superheroes']),
       error: (err: Error) => {
         this.errorMessage.set(err.message);

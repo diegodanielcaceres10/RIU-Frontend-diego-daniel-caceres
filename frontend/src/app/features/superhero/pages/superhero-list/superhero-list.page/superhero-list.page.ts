@@ -37,10 +37,10 @@ export class SuperHeroListPage {
 
   displayedColumns = ['name', 'power', 'publisher', 'actions'];
 
-  loading = signal(false);
-  keyword = signal('');
-  pageIndex = signal(0);
-  pageSize = signal(5);
+  loading = signal<boolean>(false);
+  keyword = signal<string>('');
+  pageIndex = signal<number>(0);
+  pageSize = signal<number>(5);
   errorMessage = signal<string | null>(null);
 
   filteredSuperHeroes = computed(() => {
@@ -55,6 +55,7 @@ export class SuperHeroListPage {
     return this.filteredSuperHeroes().slice(start, start + this.pageSize());
   });
   totalSuperHeroes = computed(() => this.filteredSuperHeroes().length);
+  serviceIsLoading = computed(() => this.superHeroService.isLoading());
 
   ngOnInit(): void {
     void this.loadSuperHeroes();
@@ -98,10 +99,9 @@ export class SuperHeroListPage {
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.loading.set(true);
         this.superHeroService
           .deleteSuperHero(id)
-          .pipe(finalize(() => this.loading.set(false)))
+          .pipe()
           .subscribe({
             error: (err: Error) => this.errorMessage.set(err.message),
           });

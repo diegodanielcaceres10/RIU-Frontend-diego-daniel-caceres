@@ -45,9 +45,11 @@
           <button
             mat-flat-button
             class="superhero-form__btn"
-            [class]="saving() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--cancel'"
+            [class]="
+              serviceIsLoading() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--cancel'
+            "
             (click)="onCancel()"
-            [disabled]="saving()"
+            [disabled]="serviceIsLoading()"
           >
             <span class="superhero-form__btn-content">
               <span class="superhero-form__btn-left">
@@ -59,11 +61,13 @@
           <button
             mat-flat-button
             class="superhero-form__btn superhero-form__btn--primary"
-            [class]="saving() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--submit'"
+            [class]="
+              serviceIsLoading() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--submit'
+            "
             type="submit"
-            [disabled]="saving()"
+            [disabled]="serviceIsLoading()"
           >
-            @if (saving()) {
+            @if (serviceIsLoading()) {
               <mat-spinner diameter="20"></mat-spinner>
             } @else {
               <span class="superhero-form__btn-content">

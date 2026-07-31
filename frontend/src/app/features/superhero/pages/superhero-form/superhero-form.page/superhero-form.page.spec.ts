@@ -111,30 +111,6 @@ describe('SuperHeroFormPage', () => {
       expect(routerMock.navigate).toHaveBeenCalledWith(['/superheroes']);
     });
 
-    it('should set saving to false after add completes', () => {
-      component.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-      component.onSubmit();
-
-      expect(component.saving()).toBe(false);
-    });
-
-    it('should set saving to true while the request is in flight', () => {
-      // Simulamos un observable que aún no resuelve
-      let resolveFn!: (value: SuperHero) => void;
-      superHeroServiceMock.addSuperHero.mockReturnValue({
-        pipe: () => ({
-          subscribe: (observer: { next: (v: SuperHero) => void }) => {
-            resolveFn = observer.next;
-          },
-        }),
-      });
-
-      component.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-      component.onSubmit();
-
-      expect(component.saving()).toBe(true);
-    });
-
     it('should show error message and NOT navigate when addSuperHero fails (duplicate name)', () => {
       superHeroServiceMock.addSuperHero.mockReturnValue(
         throwError(() => new Error('Ya existe un superhéroe con ese nombre')),
@@ -228,14 +204,6 @@ describe('SuperHeroFormPage', () => {
 
       expect(component.errorMessage()).toBe('Ya existe otro superhéroe con ese nombre');
       expect(routerMock.navigate).not.toHaveBeenCalled();
-    });
-
-    it('should set saving to false after updateSuperHero fails', () => {
-      superHeroServiceMock.updateSuperHero.mockReturnValue(throwError(() => new Error('fail')));
-
-      component.onSubmit();
-
-      expect(component.saving()).toBe(false);
     });
   });
 
