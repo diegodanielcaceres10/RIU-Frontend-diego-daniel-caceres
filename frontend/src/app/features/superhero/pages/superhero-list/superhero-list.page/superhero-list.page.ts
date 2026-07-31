@@ -14,6 +14,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../../../../shared/confirm-dialog/confirm-dialog.component';
+import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-superhero-list-page',
@@ -25,6 +26,7 @@ import {
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    ButtonComponent,
   ],
   templateUrl: './superhero-list.page.html',
   styleUrl: './superhero-list.page.scss',

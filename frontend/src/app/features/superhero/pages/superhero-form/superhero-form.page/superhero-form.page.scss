@@ -69,54 +69,8 @@ $radius: 28px;
   }
 
   &__actions {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    justify-content: center;
-  }
-
-  &__btn {
-    height: 3rem;
-    border-radius: 0.5rem;
-    transition: 0.25s;
-    flex: 1;
-
-    &-content {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    &-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    &--cancel {
-      border: 1px solid rgba(217, 215, 215, 0.8);
-      background: white !important;
-      color: $text !important;
-      box-shadow: $shadow-md;
-    }
-
-    &--cancel:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 35px rgba(40, 55, 90, 0.12);
-    }
-
-    &--submit {
-      color: white;
-      background: linear-gradient(90deg, $primary, $secondary);
-    }
-
-    &--submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 35px rgba(95, 92, 255, 0.3);
-    }
-
-    &--disabled {
-      opacity: 0.5;
-    }
   }
 }

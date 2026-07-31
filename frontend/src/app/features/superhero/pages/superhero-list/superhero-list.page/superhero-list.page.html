@@ -5,10 +5,12 @@
         <h1 class="superhero-list__title">Listado de héroes</h1>
       </div>
 
-      <button mat-flat-button class="superhero-list__add-btn" (click)="goToAdd()">
-        <mat-icon>add</mat-icon>
-        Agregar héroe
-      </button>
+      <app-ui-button
+        innerText="Agregar héroe"
+        leftMatIcon="add"
+        variant="primary"
+        (onClick)="goToAdd()"
+      />
     </div>
 
     <mat-form-field appearance="outline" class="superhero-list__search input-form">

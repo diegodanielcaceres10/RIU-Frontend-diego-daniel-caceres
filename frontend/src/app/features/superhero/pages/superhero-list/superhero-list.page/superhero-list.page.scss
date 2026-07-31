@@ -41,18 +41,6 @@ $border: #eceef5;
     font-weight: 700;
   }
 
-  &__add-btn {
-    height: 3rem;
-    border-radius: 0.5rem;
-    transition: 0.25s;
-    color: white;
-    background: linear-gradient(90deg, $primary, $secondary);
-
-    &:hover {
-      transform: translateY(-2px);
-    }
-  }
-
   &__search {
     width: 100%;
   }

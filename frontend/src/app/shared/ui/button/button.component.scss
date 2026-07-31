@@ -1,0 +1,52 @@
+$primary: #5f5cff;
+$secondary: #3cc7e8;
+$text: #1f2937;
+
+$shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
+
+.button-custom {
+  color: $text !important;
+  display: flex;
+  justify-content: center;
+  height: 3rem;
+  border-radius: 0.5rem;
+  transition: 0.25s;
+  border: 1px solid rgba(217, 215, 215, 0.8);
+  background: white !important;
+  box-shadow: $shadow-md;
+  width: 100%;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 35px rgba(40, 55, 90, 0.12);
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__text {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__arrow {
+    transition: 0.25s;
+  }
+
+  &:hover &__arrow {
+    transform: translateX(6px);
+  }
+
+  &-primary {
+    color: white !important;
+    background: linear-gradient(90deg, $primary, $secondary) !important;
+  }
+
+  &-disabled {
+    opacity: 0.5;
+  }
+}

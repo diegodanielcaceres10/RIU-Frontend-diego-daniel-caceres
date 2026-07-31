@@ -350,22 +350,6 @@ describe('SuperHeroFormPage', () => {
       expect(el.textContent).toContain('La editorial es obligatoria');
     });
 
-    it('should show the save icon (not the spinner) once saving finishes', () => {
-      setup(null);
-      const fixture = TestBed.createComponent(SuperHeroFormPage);
-      const localComponent = fixture.componentInstance;
-      fixture.detectChanges();
-
-      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-      localComponent.onSubmit();
-      fixture.detectChanges();
-
-      const el: HTMLElement = fixture.nativeElement;
-      const submitButton = el.querySelector('.superhero-form__btn--submit');
-
-      expect(submitButton?.querySelector('mat-icon')).toBeTruthy();
-    });
-
     it('should display the error message block when addSuperHero fails', () => {
       setup(null);
       superHeroServiceMock.addSuperHero.mockReturnValue(

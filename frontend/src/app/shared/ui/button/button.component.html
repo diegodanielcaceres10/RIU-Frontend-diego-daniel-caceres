@@ -1,0 +1,26 @@
+<button
+  mat-flat-button
+  class="button-custom"
+  [class.button-custom-primary]="variant() === 'primary'"
+  [class.button-custom-disabled]="disabled()"
+  (click)="onClick.emit()"
+  [disabled]="disabled()"
+  [type]="type()"
+>
+  @if (showSpinner()) {
+    <mat-spinner diameter="20"></mat-spinner>
+  } @else {
+    <span class="button-custom__content">
+      <span class="button-custom__text">
+        @if (leftMatIcon()) {
+          <mat-icon>{{ leftMatIcon() }}</mat-icon>
+        }
+        <span>{{ innerText() }}</span>
+      </span>
+
+      @if (rightArrowMatIcon()) {
+        <mat-icon class="button-custom__arrow"> {{ rightArrowMatIcon() }} </mat-icon>
+      }
+    </span>
+  }
+</button>

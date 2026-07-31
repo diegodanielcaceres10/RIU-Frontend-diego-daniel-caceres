@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SuperHeroService } from '../../../data/superhero-api.service';
 import { UppercaseDirective } from '../../../../../shared/directives/uppercase.directive';
+import { ButtonComponent } from '../../../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-superhero-form-page',
@@ -29,6 +30,7 @@ import { UppercaseDirective } from '../../../../../shared/directives/uppercase.d
     MatIconModule,
     MatProgressSpinnerModule,
     UppercaseDirective,
+    ButtonComponent,
   ],
   templateUrl: './superhero-form.page.html',
   styleUrl: './superhero-form.page.scss',

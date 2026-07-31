@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { UppercaseDirective } from './uppercase.directive';
 
 @Component({
-  standalone: true,
   imports: [UppercaseDirective],
   template: `<input appUppercase />`,
 })

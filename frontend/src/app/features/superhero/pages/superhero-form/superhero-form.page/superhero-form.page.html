@@ -42,38 +42,15 @@
           </mat-form-field>
         </div>
         <div class="superhero-form__actions">
-          <button
-            mat-flat-button
-            class="superhero-form__btn"
-            [class]="isLoading() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--cancel'"
-            (click)="onCancel()"
-            [disabled]="isLoading()"
-          >
-            <span class="superhero-form__btn-content">
-              <span class="superhero-form__btn-left">
-                <span>Cancelar</span>
-              </span>
-            </span>
-          </button>
-
-          <button
-            mat-flat-button
-            class="superhero-form__btn superhero-form__btn--primary"
-            [class]="isLoading() ? 'superhero-form__btn--disabled' : 'superhero-form__btn--submit'"
+          <app-ui-button innerText="Cancelar" (onClick)="onCancel()" [disabled]="isLoading()" />
+          <app-ui-button
             type="submit"
+            variant="primary"
+            leftMatIcon="save"
+            [innerText]="isLoading() ? '' : isEditMode() ? 'Guardar cambios' : 'Crear héroe'"
             [disabled]="isLoading()"
-          >
-            @if (isLoading()) {
-              <mat-spinner diameter="20"></mat-spinner>
-            } @else {
-              <span class="superhero-form__btn-content">
-                <span class="superhero-form__btn-left">
-                  <mat-icon>save</mat-icon>
-                  <span>{{ isEditMode() ? 'Guardar cambios' : 'Crear héroe' }}</span>
-                </span>
-              </span>
-            }
-          </button>
+            [showSpinner]="isLoading()"
+          />
         </div>
       </form>
 

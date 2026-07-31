@@ -9,42 +9,31 @@
     <div class="home__divider"></div>
 
     <div class="home__actions">
-      <button mat-flat-button class="home__btn home__btn--light" (click)="goToList()">
-        <span class="home__btn-content">
-          <span class="home__btn-left">
-            <mat-icon>list</mat-icon>
-            <span>Ver listado</span>
-          </span>
+      <app-ui-button
+        innerText="Ver listado"
+        leftMatIcon="list"
+        rightArrowMatIcon="chevron_right"
+        (onClick)="goToList()"
+      />
 
-          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
-        </span>
-      </button>
-
-      <button mat-flat-button class="home__btn home__btn--primary" (click)="goToAdd()">
-        <span class="home__btn-content">
-          <span class="home__btn-left">
-            <mat-icon>add_circle</mat-icon>
-            <span>Agregar héroe</span>
-          </span>
-
-          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
-        </span>
-      </button>
+      <app-ui-button
+        innerText="Agregar héroe"
+        leftMatIcon="add_circle"
+        rightArrowMatIcon="chevron_right"
+        variant="primary"
+        (onClick)="goToAdd()"
+      />
 
       <a
-        mat-flat-button
-        class="home__btn home__btn--light"
+        class="home__link"
         href="https://diegodanielcaceres10.github.io/nura/"
         target="_blank"
         rel="noopener noreferrer"
       >
-        <span class="home__btn-content">
-          <span class="home__btn-left">
-            <mat-icon>badge</mat-icon>
-            <span>Ver mi portfolio</span>
-          </span>
+        <span class="home__link-content">
+          <span>Ver mi portfolio</span>
 
-          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
+          <mat-icon class="home__link-arrow"> chevron_right </mat-icon>
         </span>
       </a>
     </div>
