@@ -1,32 +1,51 @@
 <div class="home">
-  <div class="home__glow"></div>
-
   <mat-card class="home__card">
-    <mat-icon class="home__icon">bolt</mat-icon>
+    <div class="home__logo">
+      <mat-icon class="home__icon">bolt</mat-icon>
+    </div>
 
-    <h1 class="home__title">Super Heroes Manager</h1>
-    <p class="home__subtitle">Gestiona tu universo de héroes</p>
+    <h1 class="home__title">RIU Frontend Challenge</h1>
+
+    <div class="home__divider"></div>
 
     <div class="home__actions">
-      <button mat-raised-button color="primary" class="home__btn" (click)="goToList()">
-        <mat-icon>list</mat-icon>
-        Ver listado
+      <button mat-flat-button class="home__btn home__btn--light" (click)="goToList()">
+        <span class="home__btn-content">
+          <span class="home__btn-left">
+            <mat-icon>list</mat-icon>
+            <span>Ver listado</span>
+          </span>
+
+          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
+        </span>
       </button>
 
-      <button mat-raised-button class="home__btn home__btn--accent" (click)="goToAdd()">
-        <mat-icon>add_circle</mat-icon>
-        Agregar héroe
+      <button mat-flat-button class="home__btn home__btn--primary" (click)="goToAdd()">
+        <span class="home__btn-content">
+          <span class="home__btn-left">
+            <mat-icon>add_circle</mat-icon>
+            <span>Agregar héroe</span>
+          </span>
+
+          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
+        </span>
       </button>
 
       <a
-        mat-stroked-button
+        mat-flat-button
+        class="home__btn home__btn--light"
         href="https://diegodanielcaceres10.github.io/nura/"
         target="_blank"
         rel="noopener noreferrer"
-        class="home__btn home__btn--outline"
       >
-        <mat-icon>badge</mat-icon>
-        Ver mi portfolio
+        <span class="home__btn-content">
+          <span class="home__btn-left">
+            <mat-icon>badge</mat-icon>
+            <span>Ver mi portfolio</span>
+          </span>
+
+          <mat-icon class="home__btn-arrow"> chevron_right </mat-icon>
+        </span>
       </a>
     </div>
   </mat-card>

@@ -38,3 +38,30 @@ body {
 }
 
 /* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+// styles.scss (global)
+.input-form {
+  .mdc-notched-outline {
+    border-radius: 0.3rem !important;
+  }
+
+  .mdc-notched-outline {
+    border: 1px solid rgba(217, 215, 215, 1);
+    border-radius: 0.1rem;
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__trailing {
+    border: 1px solid transparent !important;
+  }
+
+  .mdc-notched-outline__notch {
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+}

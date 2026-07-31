@@ -1,140 +1,149 @@
-$accent-purple: #521f57;
-$accent-blue: #2cabb3;
-$accent-light: #7dd4d8;
+$primary: #5f5cff;
+$secondary: #36cfc9;
+
+$bg: #f7f8fc;
+$text: #171b2f;
+$text-light: #737b8c;
+
+$border: #eceef5;
 
 .superhero-list {
   position: relative;
   min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
   overflow: hidden;
-  padding: 3rem 1rem;
-  background: linear-gradient(160deg, #0d0518 0%, $accent-purple 55%, #0d0518 100%);
+  padding: 70px;
+  background: $bg;
 
-  &__glow {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    width: 700px;
-    height: 700px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba($accent-blue, 0.2) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  &__card {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 900px;
-    padding: 2rem 2.5rem;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba($accent-light, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  &__container {
+    border: 1px solid rgba(217, 215, 215, 0.5);
+    border-radius: 0.5rem;
+    box-shadow: 0 3rem 7rem rgba(40, 55, 90, 0.25);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 90%;
+    max-width: 1200px;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.82);
+    margin: 0 auto;
   }
 
   &__header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 1rem;
   }
 
   &__title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
     margin: 0;
+    text-align: center;
+    font-weight: 700;
   }
 
   &__add-btn {
-    background: $accent-blue !important;
-    color: #fff !important;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    transition: 0.25s;
+    color: white;
+    background: linear-gradient(90deg, $primary, $secondary);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 
-  &__filter {
+  &__search {
     width: 100%;
-    margin-bottom: 1rem;
-
-    ::ng-deep .mat-mdc-text-field-wrapper {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    ::ng-deep .mat-mdc-form-field-label,
-    ::ng-deep input {
-      color: #fff;
-    }
-  }
-
-  &__table-wrapper {
-    overflow-x: auto;
-    border-radius: 8px;
   }
 
   &__table {
-    width: 100%;
-    background: transparent;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid $border;
+    background: white;
+  }
 
-    ::ng-deep th.mat-mdc-header-cell {
-      color: $accent-light;
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    ::ng-deep td.mat-mdc-cell,
-    ::ng-deep th.mat-mdc-header-cell {
-      border-bottom-color: rgba(255, 255, 255, 0.08);
-    }
-
-    ::ng-deep tr.mat-mdc-row {
-      color: rgba(255, 255, 255, 0.85);
-
-      &:hover {
-        background: rgba($accent-blue, 0.08);
-      }
-    }
-
-    ::ng-deep .mat-mdc-icon-button {
-      color: $accent-light;
-    }
+  &__loading {
+    padding: 80px;
+    display: flex;
+    justify-content: center;
   }
 
   &__empty {
+    padding: 80px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 2rem 0;
-  }
-
-  ::ng-deep .mat-mdc-paginator {
-    background: transparent;
-    color: #fff;
+    color: $text-light;
   }
 
   &__error {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    background: rgba(#f44336, 0.1);
-    border: 1px solid rgba(#f44336, 0.3);
-    color: #ff8a80;
-    font-size: 0.9rem;
-    margin-top: 1rem;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 16px;
+    background: #fff3f3;
+    color: #d0344b;
+    border: 1px solid #ffd6dc;
+  }
+}
 
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
+::ng-deep .superhero-list {
+  .mat-mdc-header-row {
+    height: 4rem;
+  }
+
+  .mat-mdc-row {
+    height: 4rem;
+    transition: 0.2s;
+    &:hover {
+      background: #f8f9ff;
     }
+  }
+
+  .mat-mdc-header-cell {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8d94a5;
+    font-weight: 700;
+    border-bottom: 1px solid $border;
+    background: white;
+  }
+
+  .mat-mdc-cell {
+    border-bottom: 1px solid $border;
+  }
+
+  .mat-mdc-row:nth-child(even) {
+    background: #fcfcfe;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .actions button {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid $border;
+    background: white;
+  }
+
+  .edit {
+    color: $primary;
+  }
+
+  .delete {
+    color: #ff5b6e;
+  }
+
+  .mat-mdc-paginator {
+    margin-top: 22px;
+    border-radius: 18px;
+    background: transparent;
   }
 }

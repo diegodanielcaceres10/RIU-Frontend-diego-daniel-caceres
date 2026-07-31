@@ -388,7 +388,7 @@ describe('SuperHeroFormPage', () => {
       fixture.detectChanges();
 
       const el: HTMLElement = fixture.nativeElement;
-      const submitButton = el.querySelector('.superhero-form__submit');
+      const submitButton = el.querySelector('.superhero-form__btn--primary');
 
       expect(submitButton?.querySelector('mat-spinner')).toBeTruthy();
       expect(submitButton?.querySelector('mat-icon')).toBeFalsy();
@@ -427,7 +427,7 @@ describe('SuperHeroFormPage', () => {
       fixture.detectChanges();
 
       const el: HTMLElement = fixture.nativeElement;
-      const submitButton = el.querySelector('.superhero-form__submit');
+      const submitButton = el.querySelector('.superhero-form__btn--submit');
 
       expect(submitButton?.querySelector('mat-icon')).toBeTruthy();
     });

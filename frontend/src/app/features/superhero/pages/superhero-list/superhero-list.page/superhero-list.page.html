@@ -1,77 +1,93 @@
 <div class="superhero-list">
-  <div class="superhero-list__glow"></div>
-
-  <div class="superhero-list__card">
+  <div class="superhero-list__container">
     <div class="superhero-list__header">
-      <h1 class="superhero-list__title">Listado de héroes</h1>
-      <button mat-raised-button class="superhero-list__add-btn" (click)="goToAdd()">
-        <mat-icon>add_circle</mat-icon>
-        Añadir héroe
+      <div>
+        <h1 class="superhero-list__title">Listado de héroes</h1>
+      </div>
+
+      <button mat-flat-button class="superhero-list__add-btn" (click)="goToAdd()">
+        <mat-icon>add</mat-icon>
+        Agregar héroe
       </button>
     </div>
 
-    <mat-form-field class="superhero-list__filter" appearance="outline">
-      <mat-label>Buscar héroe</mat-label>
+    <mat-form-field appearance="outline" class="superhero-list__search input-form">
       <input
         matInput
+        placeholder="Buscar héroe..."
         [value]="keyword()"
         (input)="onFilterChange($any($event.target).value)"
-        placeholder="Ej: man"
       />
+
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     @if (errorMessage()) {
       <div class="superhero-list__error">
         <mat-icon>error_outline</mat-icon>
+
         <span>{{ errorMessage() }}</span>
       </div>
     }
 
-    <div class="superhero-list__table-wrapper">
+    <div class="superhero-list__table">
       @if (loading()) {
         <div class="superhero-list__loading">
-          <mat-spinner diameter="40"></mat-spinner>
+          <mat-spinner diameter="42"></mat-spinner>
         </div>
       } @else {
-        <table mat-table [dataSource]="pagedSuperHeroes()" class="superhero-list__table">
+        <table mat-table [dataSource]="pagedSuperHeroes()">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
-            <td mat-cell *matCellDef="let superhero">{{ superhero.name }}</td>
+
+            <td mat-cell *matCellDef="let superhero">
+              {{ superhero.name }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="power">
             <th mat-header-cell *matHeaderCellDef>Poder</th>
-            <td mat-cell *matCellDef="let superhero">{{ superhero.power }}</td>
+
+            <td mat-cell *matCellDef="let superhero">
+              {{ superhero.power }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="publisher">
             <th mat-header-cell *matHeaderCellDef>Editorial</th>
-            <td mat-cell *matCellDef="let superhero">{{ superhero.publisher }}</td>
+
+            <td mat-cell *matCellDef="let superhero">
+              {{ superhero.publisher }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
+
             <td mat-cell *matCellDef="let superhero">
-              <button mat-icon-button (click)="goToEdit(superhero.id)" aria-label="Editar">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                (click)="onDelete(superhero.id, superhero.name)"
-                aria-label="Borrar"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
+              <div class="actions">
+                <button mat-icon-button class="edit" (click)="goToEdit(superhero.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  class="delete"
+                  (click)="onDelete(superhero.id, superhero.name)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
 
         @if (pagedSuperHeroes().length === 0) {
-          <p class="superhero-list__empty">No se encontraron héroes.</p>
+          <div class="superhero-list__empty">No se encontraron héroes</div>
         }
       }
     </div>
@@ -82,6 +98,7 @@
       [pageIndex]="pageIndex()"
       [pageSizeOptions]="[5, 10, 25]"
       (page)="onPageChange($event)"
-    ></mat-paginator>
+    >
+    </mat-paginator>
   </div>
 </div>
