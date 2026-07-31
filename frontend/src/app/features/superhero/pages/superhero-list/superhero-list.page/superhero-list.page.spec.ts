@@ -14,6 +14,7 @@ describe('SuperHeroListPage', () => {
     allSuperHeroes: ReturnType<typeof signal<SuperHero[]>>;
     getSuperHeroes: ReturnType<typeof vi.fn>;
     deleteSuperHero: ReturnType<typeof vi.fn>;
+    isLoading: ReturnType<typeof vi.fn>;
   };
   let routerMock: { navigate: ReturnType<typeof vi.fn> };
   let dialogMock: { open: ReturnType<typeof vi.fn> };
@@ -31,6 +32,7 @@ describe('SuperHeroListPage', () => {
       allSuperHeroes: superHeroesSignal,
       getSuperHeroes: vi.fn().mockReturnValue(of(mockSuperHeroes)),
       deleteSuperHero: vi.fn().mockReturnValue(of(void 0)),
+      isLoading: vi.fn().mockReturnValue(false),
     };
 
     routerMock = { navigate: vi.fn() };

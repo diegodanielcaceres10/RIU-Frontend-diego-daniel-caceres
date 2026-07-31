@@ -51,7 +51,7 @@ export class SuperHeroFormPage implements OnInit {
     publisher: ['', Validators.required],
   });
 
-  serviceIsLoading = computed(() => this.superHeroService.isLoading());
+  isLoading = computed(() => this.superHeroService.isLoading());
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');

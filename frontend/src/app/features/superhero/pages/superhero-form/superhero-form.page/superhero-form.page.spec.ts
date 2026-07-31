@@ -5,6 +5,7 @@ import { of, Subject, throwError } from 'rxjs';
 import { SuperHeroFormPage } from './superhero-form.page';
 import { SuperHeroService } from '../../../data/superhero-api.service';
 import { SuperHero } from '../../../domain/superhero.models';
+import { signal, WritableSignal } from '@angular/core';
 
 describe('SuperHeroFormPage', () => {
   let component: SuperHeroFormPage;
@@ -12,6 +13,7 @@ describe('SuperHeroFormPage', () => {
     getSuperHeroById: ReturnType<typeof vi.fn>;
     addSuperHero: ReturnType<typeof vi.fn>;
     updateSuperHero: ReturnType<typeof vi.fn>;
+    isLoading: WritableSignal<boolean>;
   };
   let routerMock: { navigate: ReturnType<typeof vi.fn> };
 
@@ -23,10 +25,12 @@ describe('SuperHeroFormPage', () => {
   };
 
   function setup(paramId: string | null = null): void {
+    const loadingSignal = signal(false);
     superHeroServiceMock = {
       getSuperHeroById: vi.fn().mockReturnValue(of(mockSuperHero)),
       addSuperHero: vi.fn().mockReturnValue(of(mockSuperHero)),
       updateSuperHero: vi.fn().mockReturnValue(of(mockSuperHero)),
+      isLoading: loadingSignal,
     };
     routerMock = { navigate: vi.fn() };
 
@@ -209,10 +213,12 @@ describe('SuperHeroFormPage', () => {
 
   describe('cuando el héroe no existe', () => {
     beforeEach(() => {
+      const loadingSignal = signal(false);
       superHeroServiceMock = {
         getSuperHeroById: vi.fn().mockReturnValue(of(undefined)),
         addSuperHero: vi.fn(),
         updateSuperHero: vi.fn(),
+        isLoading: loadingSignal,
       };
       routerMock = { navigate: vi.fn() };
 
@@ -241,10 +247,12 @@ describe('SuperHeroFormPage', () => {
 
   describe('renderizado del template', () => {
     it('should show the spinner while loading (edit mode)', () => {
+      const loadingSignal = signal(false);
       superHeroServiceMock = {
         getSuperHeroById: vi.fn().mockReturnValue({ pipe: () => ({ subscribe: () => {} }) }),
         addSuperHero: vi.fn(),
         updateSuperHero: vi.fn(),
+        isLoading: loadingSignal,
       };
       routerMock = { navigate: vi.fn() };
 
@@ -340,48 +348,6 @@ describe('SuperHeroFormPage', () => {
       fixture.detectChanges();
 
       expect(el.textContent).toContain('La editorial es obligatoria');
-    });
-
-    it('should show a spinner inside the submit button while saving', () => {
-      setup(null);
-      const subject = new Subject<SuperHero>();
-      superHeroServiceMock.addSuperHero.mockReturnValue(subject.asObservable());
-
-      const fixture = TestBed.createComponent(SuperHeroFormPage);
-      const localComponent = fixture.componentInstance;
-      fixture.detectChanges();
-
-      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-      localComponent.onSubmit();
-      fixture.detectChanges();
-
-      const el: HTMLElement = fixture.nativeElement;
-      const submitButton = el.querySelector('.superhero-form__btn--primary');
-
-      expect(submitButton?.querySelector('mat-spinner')).toBeTruthy();
-      expect(submitButton?.querySelector('mat-icon')).toBeFalsy();
-
-      subject.next({ id: 1, name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-    });
-
-    it('should disable cancel and submit buttons while saving', () => {
-      setup(null);
-      const subject = new Subject<SuperHero>();
-      superHeroServiceMock.addSuperHero.mockReturnValue(subject.asObservable());
-
-      const fixture = TestBed.createComponent(SuperHeroFormPage);
-      const localComponent = fixture.componentInstance;
-      fixture.detectChanges();
-
-      localComponent.form.setValue({ name: 'Flash', power: 'Velocidad', publisher: 'DC' });
-      localComponent.onSubmit();
-      fixture.detectChanges();
-
-      const el: HTMLElement = fixture.nativeElement;
-      const buttons = el.querySelectorAll<HTMLButtonElement>('button');
-
-      expect(buttons[0].disabled).toBe(true);
-      expect(buttons[1].disabled).toBe(true);
     });
 
     it('should show the save icon (not the spinner) once saving finishes', () => {

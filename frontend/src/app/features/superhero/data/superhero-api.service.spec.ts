@@ -165,11 +165,15 @@ describe('SuperHeroService', () => {
       });
 
       it('should complete without error when id does not exist', () => {
+        vi.useFakeTimers();
         let completed = false;
 
         service.deleteSuperHero(999).subscribe({ complete: () => (completed = true) });
 
+        vi.advanceTimersByTime(2000);
         expect(completed).toBe(true);
+
+        vi.useRealTimers();
       });
     });
 
@@ -216,10 +220,12 @@ describe('SuperHeroService', () => {
     });
 
     it('should call httpService.post on addSuperHero and sync the signal', () => {
+      vi.useFakeTimers();
       const newHero: SuperHero = { id: 10, name: 'Batman', power: 'Intelecto', publisher: 'DC' };
       httpServiceMock.post.mockReturnValue(of(newHero));
 
       service.addSuperHero({ name: 'Batman', power: 'Intelecto', publisher: 'DC' }).subscribe();
+      vi.advanceTimersByTime(2000);
 
       expect(httpServiceMock.post).toHaveBeenCalledWith('superheroes', {
         name: 'Batman',
@@ -227,29 +233,39 @@ describe('SuperHeroService', () => {
         publisher: 'DC',
       });
       expect(service.allSuperHeroes()).toContainEqual(newHero);
+
+      vi.useRealTimers();
     });
 
     it('should call httpService.put on updateSuperHero and sync the signal', () => {
+      vi.useFakeTimers();
       const updated: SuperHero = { id: 1, name: 'Clark Kent', power: 'Vuelo', publisher: 'DC' };
       httpServiceMock.put.mockReturnValue(of(updated));
       httpServiceMock.get.mockReturnValue(of(mockData));
 
       service.getSuperHeroes().subscribe();
       service.updateSuperHero(updated).subscribe();
+      vi.advanceTimersByTime(2000);
 
       expect(httpServiceMock.put).toHaveBeenCalledWith('superheroes/1', updated);
       expect(service.allSuperHeroes().find((h) => h.id === 1)).toEqual(updated);
+
+      vi.useRealTimers();
     });
 
     it('should call httpService.delete on deleteSuperHero and sync the signal', () => {
+      vi.useFakeTimers();
       httpServiceMock.get.mockReturnValue(of(mockData));
       httpServiceMock.delete.mockReturnValue(of(void 0));
 
       service.getSuperHeroes().subscribe();
       service.deleteSuperHero(1).subscribe();
+      vi.advanceTimersByTime(2000);
 
       expect(httpServiceMock.delete).toHaveBeenCalledWith('superheroes/1');
       expect(service.allSuperHeroes().find((h) => h.id === 1)).toBeUndefined();
+
+      vi.useRealTimers();
     });
 
     describe('manejo de errores', () => {

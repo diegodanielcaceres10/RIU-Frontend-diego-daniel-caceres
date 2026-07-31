@@ -55,7 +55,7 @@ export class SuperHeroListPage {
     return this.filteredSuperHeroes().slice(start, start + this.pageSize());
   });
   totalSuperHeroes = computed(() => this.filteredSuperHeroes().length);
-  serviceIsLoading = computed(() => this.superHeroService.isLoading());
+  isLoading = computed(() => this.loading() || this.superHeroService.isLoading());
 
   ngOnInit(): void {
     void this.loadSuperHeroes();

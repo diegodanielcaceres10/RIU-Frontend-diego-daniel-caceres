@@ -31,7 +31,7 @@
     }
 
     <div class="superhero-list__table">
-      @if (loading() || serviceIsLoading()) {
+      @if (isLoading()) {
         <div class="superhero-list__loading">
           <mat-spinner diameter="42"></mat-spinner>
         </div>
