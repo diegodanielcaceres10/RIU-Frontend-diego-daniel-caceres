@@ -42,7 +42,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/riu/",
+              "baseHref": "/RIU-Frontend-diego-daniel-caceres/",
               "budgets": [
                 {
                   "type": "initial",
