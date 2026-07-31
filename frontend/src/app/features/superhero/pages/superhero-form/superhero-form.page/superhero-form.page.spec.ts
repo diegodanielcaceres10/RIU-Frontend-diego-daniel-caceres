@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
-import { of, Subject, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { SuperHeroFormPage } from './superhero-form.page';
 import { SuperHeroService } from '../../../data/superhero-api.service';
 import { SuperHero } from '../../../domain/superhero.models';
@@ -194,7 +194,6 @@ describe('SuperHeroFormPage', () => {
     });
 
     it('should set loading to true while fetching superhero and false after', () => {
-      // loading ya resuelto por el mock síncrono (of()), así que verificamos el estado final
       expect(component.loading()).toBe(false);
     });
 
@@ -249,7 +248,7 @@ describe('SuperHeroFormPage', () => {
     it('should show the spinner while loading (edit mode)', () => {
       const loadingSignal = signal(false);
       superHeroServiceMock = {
-        getSuperHeroById: vi.fn().mockReturnValue({ pipe: () => ({ subscribe: () => {} }) }),
+        getSuperHeroById: vi.fn().mockReturnValue({ pipe: () => ({ subscribe: vi.fn() }) }),
         addSuperHero: vi.fn(),
         updateSuperHero: vi.fn(),
         isLoading: loadingSignal,

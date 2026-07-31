@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface RequestOptions {
-  params?: HttpParams | { [param: string]: string | number | boolean };
-  headers?: HttpHeaders | { [header: string]: string | string[] };
+  params?: HttpParams | Record<string, string | number | boolean>;
+  headers?: HttpHeaders | Record<string, string | string[]>;
 }
 
 @Injectable({ providedIn: 'root' })

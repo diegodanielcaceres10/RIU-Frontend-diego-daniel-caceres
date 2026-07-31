@@ -27,7 +27,6 @@
               "browser": "browser"
             },
             "browser": "src/main.ts",
-            "server": "src/main.server.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -39,12 +38,11 @@
             "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
-            },
-            "outputMode": "static"
+            }
           },
           "configurations": {
             "production": {
-              "baseHref": "/nura/",
+              "baseHref": "/riu/",
               "budgets": [
                 {
                   "type": "initial",

@@ -3,7 +3,7 @@
   class="button-custom"
   [class.button-custom-primary]="variant() === 'primary'"
   [class.button-custom-disabled]="disabled()"
-  (click)="onClick.emit()"
+  (click)="buttonClick.emit()"
   [disabled]="disabled()"
   [type]="type()"
 >

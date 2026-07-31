@@ -22,5 +22,5 @@ export class ButtonComponent {
   readonly disabled = input<boolean>(false);
   readonly showSpinner = input<boolean>(false);
 
-  readonly onClick = output<void>();
+  readonly buttonClick = output<void>();
 }

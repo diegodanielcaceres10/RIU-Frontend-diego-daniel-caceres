@@ -42,7 +42,7 @@
           </mat-form-field>
         </div>
         <div class="superhero-form__actions">
-          <app-ui-button innerText="Cancelar" (onClick)="onCancel()" [disabled]="isLoading()" />
+          <app-ui-button innerText="Cancelar" (buttonClick)="onCancel()" [disabled]="isLoading()" />
           <app-ui-button
             type="submit"
             variant="primary"

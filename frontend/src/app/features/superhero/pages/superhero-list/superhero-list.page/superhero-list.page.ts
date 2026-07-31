@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  computed,
+  OnInit,
+} from '@angular/core';
 import { finalize } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
@@ -32,7 +39,7 @@ import { ButtonComponent } from '../../../../../shared/ui/button/button.componen
   styleUrl: './superhero-list.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SuperHeroListPage {
+export class SuperHeroListPage implements OnInit {
   private superHeroService = inject(SuperHeroService);
   private router = inject(Router);
   private dialog = inject(MatDialog);

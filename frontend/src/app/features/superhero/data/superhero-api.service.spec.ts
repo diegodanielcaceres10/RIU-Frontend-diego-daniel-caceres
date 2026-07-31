@@ -108,7 +108,7 @@ describe('SuperHeroService', () => {
 
       it('should NOT modify the signal when rejecting a duplicate', () => {
         service.addSuperHero({ name: 'Superman', power: 'x', publisher: 'DC' }).subscribe({
-          error: () => {},
+          error: vi.fn(),
         });
 
         expect(service.allSuperHeroes()).toHaveLength(2);
@@ -192,7 +192,7 @@ describe('SuperHeroService', () => {
       it('should NOT populate the signal when getLocal fails', () => {
         httpServiceMock.getLocal.mockReturnValue(throwError(() => new Error('fail')));
 
-        service.getSuperHeroes().subscribe({ error: () => {} });
+        service.getSuperHeroes().subscribe({ error: vi.fn() });
 
         expect(service.allSuperHeroes()).toEqual([]);
       });
@@ -309,7 +309,7 @@ describe('SuperHeroService', () => {
 
         service.getSuperHeroes().subscribe();
         service.addSuperHero({ name: 'Batman', power: 'x', publisher: 'DC' }).subscribe({
-          error: () => {},
+          error: vi.fn(),
         });
 
         expect(service.allSuperHeroes()).toHaveLength(2); // no se agregó nada
@@ -336,7 +336,7 @@ describe('SuperHeroService', () => {
         service.getSuperHeroes().subscribe();
         service
           .updateSuperHero({ id: 1, name: 'Clark Kent', power: 'Vuelo', publisher: 'DC' })
-          .subscribe({ error: () => {} });
+          .subscribe({ error: vi.fn() });
 
         expect(service.allSuperHeroes().find((h) => h.id === 1)?.name).toBe('Superman'); // sin cambios
       });
@@ -358,7 +358,7 @@ describe('SuperHeroService', () => {
         httpServiceMock.delete.mockReturnValue(throwError(() => new Error('fail')));
 
         service.getSuperHeroes().subscribe();
-        service.deleteSuperHero(1).subscribe({ error: () => {} });
+        service.deleteSuperHero(1).subscribe({ error: vi.fn() });
 
         expect(service.allSuperHeroes()).toHaveLength(2); // sigue estando
       });
